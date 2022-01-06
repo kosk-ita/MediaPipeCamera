@@ -4,9 +4,9 @@
 
 大学の課題で制作したものです。
 
-Webカメラの映像から顔検出やハンドポーズ推定をして映像に装飾を加える機能を持つカメラアプリです。Googleの提供するMediaPipe(https://google.github.io/mediapipe/)を利用しています。
+Webカメラの映像から顔検出やハンドポーズ推定をして映像に装飾を加える機能を持つカメラアプリです。Googleの提供するMediaPipe( https://google.github.io/mediapipe/ )を利用しています。
 
-ハンドポーズ推定においてはKazuhito00氏の公開しているソースコード（https://github.com/Kazuhito00/hand-gesture-recognition-using-mediapipe）を大変参考にさせていただきました。
+ハンドポーズ推定においてはKazuhito00氏の公開しているソースコード（ https://github.com/Kazuhito00/hand-gesture-recognition-using-mediapipe ）を大変参考にさせていただきました。
 
 
 
