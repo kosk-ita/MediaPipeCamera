@@ -4,6 +4,7 @@ from collections import deque
 from utils import CvFpsCalc
 import numpy as np
 import cv2
+import PIL
 from PIL import Image, ImageFont, ImageDraw
 
 import emoji
@@ -20,7 +21,7 @@ class BaseDecoration():
     description = "Sample Text."
     def decorate(self, input_image):
         return input_image
-
+    
 class MPFaceDecoration(BaseDecoration):
     name = "顔認識デコレーション MediaPipe版"
     description = "MediaPipeを用いて顔を検出し、アイコンを表示します。アイコンに用いる絵文字は自由に指定できます。"
@@ -68,7 +69,7 @@ class MPFaceDecoration(BaseDecoration):
                 y = detection.location_data.relative_bounding_box.ymin * self.im_p.height
                 h = detection.location_data.relative_bounding_box.height * self.im_p.height
                 w = detection.location_data.relative_bounding_box.width * self.im_p.width
-                x, y, h, w = validate_facerect(x, y, h, w)
+                x, y, h, w = validate_facerect(x, y, h, w, mode='face')
                 resized_icon = self.icon.resize((w, h))
                 self.im_p.paste(resized_icon, (x, y))
                 
@@ -132,11 +133,7 @@ class FruitLotteryDecoration(BaseDecoration):
                     
                 elif hand_sign_id == 1:  # グー
                     self.random_fruit()
-
-                # 描画
-                # deco_image = draw_bounding_rect(self.use_brect, deco_image, brect)
-                deco_image = draw_landmarks(deco_image, landmark_list)
-
+        # 描画
         deco_image = np.array(self.im_p)
         return deco_image
     
@@ -211,12 +208,89 @@ class FingerDrawingDecoration(BaseDecoration):
                     self.point_history.append(landmark_list[8])  # 人差指座標
                 else:
                     self.point_history.append([0, 0])
-
-                # 描画
-                # debug_image = draw_bounding_rect(self.use_brect, debug_image, brect)
+                    
                 debug_image = draw_landmarks(debug_image, landmark_list)
         else:
             self.point_history.append([0, 0])
 
+        # 描画
         debug_image = draw_point_history(debug_image, self.point_history)
         return debug_image
+
+class HandSignDecoration(BaseDecoration):
+    def __init__(self):
+        self.use_brect = True
+        # モデルロード #############################################################
+        mp_hands = mp.solutions.hands
+        self.hands = mp_hands.Hands(
+            static_image_mode=False,
+            max_num_hands=1,
+            min_detection_confidence=0.7,
+            min_tracking_confidence=0.5,
+        )
+        self.keypoint_classifier = KeyPointClassifier()
+        
+        # ラベル読み込み ###########################################################
+        with open('model/keypoint_classifier/keypoint_classifier_label.csv',
+                encoding='utf-8-sig') as f:
+            self.keypoint_classifier_labels = csv.reader(f)
+            self.keypoint_classifier_labels = [
+                row[0] for row in self.keypoint_classifier_labels
+            ]
+                
+        # 識別するハンドサインと対応するPIL画像の辞書を用意
+        self.handsigns = self.setup_handsigns()
+
+    def decorate(self, input_image: np.ndarray) -> np.ndarray:
+        # image = input_image
+        input_image.flags.writeable = False
+        results = self.hands.process(input_image)
+        input_image.flags.writeable = True
+        
+        # 結果を描画する配列
+        deco_image = np.zeros_like(input_image)
+        # 結果を描画するPillowImage
+        self.im_p = Image.fromarray(deco_image)
+                
+        if results.multi_hand_landmarks is not None:
+            for hand_landmarks, handedness in zip(results.multi_hand_landmarks,
+                                                  results.multi_handedness):
+                # 外接矩形の計算
+                brect = calc_bounding_rect(deco_image, hand_landmarks)
+                # ランドマークの計算
+                landmark_list = calc_landmark_list(deco_image, hand_landmarks)
+
+                # 相対座標・正規化座標への変換
+                pre_processed_landmark_list = pre_process_landmark(
+                    landmark_list)
+                
+                # ハンドサイン分類
+                hand_sign_id = self.keypoint_classifier(pre_processed_landmark_list)
+                if hand_sign_id < 3:
+                    continue
+                handsign = list(self.handsigns.keys())[hand_sign_id - 3]  # 3: Good, 4: bad, 5: Nice
+                
+                # 描画
+                self.im_p.paste(self.handsigns[handsign], (10, 10))
+
+        deco_image = np.array(self.im_p)
+        return deco_image
+    
+    def setup_handsigns(self):
+        # 絵文字画像を設定してファイルとして保存しておく
+        # 絵文字は、右手になるように揃える。（左手の場合は、decorate()時に反転処理を入れる）
+        
+        emojis = ['👍', '👎', '✌']
+        handsign_names = ['good', 'bad', 'nice']
+        handsigns = dict()  # 名前とPIL画像の辞書
+        
+        for i, handsign in enumerate(handsign_names):
+            img = Image.new("RGB", (134,126), (0,0,0))
+            draw = ImageDraw.Draw(img)
+            font = ImageFont.truetype("./fonts/NotoColorEmoji.ttf", size=109, layout_engine=ImageFont.LAYOUT_RAQM)
+            
+            draw.text((0, 0), text=emojis[i], fill="#faa2",font=font, embedded_color=True)
+            img.save(f"images/emoji/{handsign}.png")
+            handsigns[handsign] = img  # 辞書に保存
+        
+        return handsigns  # 辞書を返す

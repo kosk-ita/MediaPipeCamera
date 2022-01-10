@@ -19,6 +19,7 @@ class CameraModel():
         self.decoration_dict = {
             'Face MediaPipe': MPFaceDecoration(),
             'Fruits Lottery': FruitLotteryDecoration(),
+            'Handsign': HandSignDecoration(),
             'Finger Drawing': FingerDrawingDecoration(),
         }
         

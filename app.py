@@ -29,6 +29,7 @@ class Application(tk.Frame):
         self.decoration_names = [
             'Face MediaPipe',
             'Fruits Lottery',
+            'Handsign',
             'Finger Drawing',
         ]
         
@@ -87,7 +88,7 @@ class Application(tk.Frame):
         # Frame_Control
         self.frame_control = tk.LabelFrame( self.master, text='Control', font=self.font_frame )
         self.frame_control.place( x=10, y=550 )
-        self.frame_control.configure( width=self.width + 30, height=180 )
+        self.frame_control.configure( width=self.width + 30, height=140 )
         self.frame_control.grid_propagate( 0 )
 
         # Frame_CameraControl
@@ -95,7 +96,7 @@ class Application(tk.Frame):
 
         #Snapshot Button
         global camera_img
-        camera_img = tk.PhotoImage(file="images/gui/camera.png").subsample(5, 5)
+        camera_img = tk.PhotoImage(file="images/gui/camera.png").subsample(8, 8)
         self.btn_snapshot = ttk.Button( self.frame_cameraControl, text='Snapshot')
         self.btn_snapshot.configure(
             command=self.press_snapshot_button,
@@ -103,7 +104,7 @@ class Application(tk.Frame):
         )
         #Flip Button
         global flip_img
-        flip_img = tk.PhotoImage(file="images/gui/flip.png").subsample(5, 5)
+        flip_img = tk.PhotoImage(file="images/gui/flip.png").subsample(8, 8)
         self.btn_flip = ttk.Button( self.frame_cameraControl, text='Flip')
         self.btn_flip.configure(
             command=self.press_flip_button,
@@ -129,9 +130,10 @@ class Application(tk.Frame):
         global deco_imgs
         # デコレーション選択ボタン画像 リスト
         deco_imgs = [
-            tk.PhotoImage(file="images/gui/face_mp.png").subsample(5, 5),
-            tk.PhotoImage(file="images/gui/fruit_lottery.png").subsample(5, 5),
-            tk.PhotoImage(file="images/gui/finger_drawing.png").subsample(5, 5),
+            tk.PhotoImage(file="images/gui/face_mp.png").subsample(8, 8),
+            tk.PhotoImage(file="images/gui/fruit_lottery.png").subsample(8, 8),
+            tk.PhotoImage(file="images/gui/handpose.png").subsample(8, 8),
+            tk.PhotoImage(file="images/gui/finger_drawing.png").subsample(8, 8),
         ]
         self.btn_deco_list = []
         for i, decoration_name in enumerate(self.decoration_names):
@@ -153,14 +155,14 @@ class Application(tk.Frame):
         self.frame_control.grid_columnconfigure(1, weight=1)
         self.frame_control.grid_columnconfigure(2, weight=2)
         
-        self.frame_filter.grid(row=0, column=0, padx=10)
+        self.frame_filter.grid(row=0, column=0, padx=1)
         self.combobox_filter.pack(anchor='center', expand=1)
         
-        self.frame_cameraControl.grid(row=0, column=1, padx=10, sticky='NESW')
-        self.btn_snapshot.pack(side=tk.LEFT, padx=5)
-        self.btn_flip.pack(side=tk.LEFT, padx=5)
+        self.frame_cameraControl.grid(row=0, column=1, padx=1, sticky='NESW')
+        self.btn_snapshot.pack(side=tk.LEFT, padx=1)
+        self.btn_flip.pack(side=tk.LEFT, padx=1)
         
-        self.frame_decoration.grid(row=0, column=2, padx=10, sticky='W')
+        self.frame_decoration.grid(row=0, column=2, padx=1, sticky='W')
         self.label_decorations.pack(side=tk.BOTTOM)
         for btn in self.btn_deco_list:
             btn.pack(side=tk.LEFT)
@@ -189,7 +191,7 @@ class Application(tk.Frame):
         self.master.after(self.delay, self.update)
 
     def press_snapshot_button(self):
-        cv2.imwrite( "frame-" + time.strftime( "%Y-%d-%m-%H-%M-%S" ) + ".png",
+        cv2.imwrite( "./snapshots/frame-" + time.strftime( "%Y-%d-%m-%H-%M-%S" ) + ".png",
                      cv2.cvtColor( self.processed_image, cv2.COLOR_BGR2RGB ) )
     
     def press_flip_button(self):
