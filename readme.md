@@ -18,21 +18,21 @@ MediaPipeCameraフォルダをカレントディレクトリに設定し、`app.
 
 ## ディレクトリ構成
 ```
-MediaPipeCamera/
+MediaPipeCamera/       
     fonts/
     images/
-        emoji/                     : 絵文字を画像化したものを保存
-        filter/                    : フィルター機能に用いる画像を保存
-        gui/                       : ボタン用の画像などを保存
-    model/						     : データセットや学習モデル等が配置されている
+        emoji/         : 絵文字を画像化したものを保存
+        filter/        : フィルター機能に用いる画像を保存
+        gui/           : ボタン用の画像などを保存
+    model/             : データセットや学習モデル等が配置されている
     snapshots/                     
     utils/
-    app.py                         : GUIを記述。メインプログラムも兼ねる
-    camera_model.py                : フィルタ機能とデコレーション機能を備えたカメラ機能を提供
-    funcs.py                       : 関数群
-    MyDecorations.py               : デコレーションクラスを記述
-    MyFilters.py                   : フィルタークラスを記述
-    readme.py                      : このファイル
+    app.py             : GUIを記述。メインプログラムも兼ねる
+    camera_model.py    : フィルタ機能とデコレーション機能を備えたカメラ機能を提供
+    funcs.py           : 関数群
+    MyDecorations.py   : デコレーションクラスを記述
+    MyFilters.py       : フィルタークラスを記述
+    readme.py          : このファイル
 
 ```
 
