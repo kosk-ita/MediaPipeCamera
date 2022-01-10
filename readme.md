@@ -19,13 +19,12 @@ MediaPipeCameraフォルダをカレントディレクトリに設定し、`app.
 ## ディレクトリ構成
 ```
 MediaPipeCamera/
-    cascade/                       : OpenCVのcascadeを入れてある
     fonts/
     images/
         emoji/                     : 絵文字を画像化したものを保存
         filter/                    : フィルター機能に用いる画像を保存
         gui/                       : ボタン用の画像などを保存
-    model/						   : データセットや学習モデル等が配置されている
+    model/						     : データセットや学習モデル等が配置されている
     snapshots/                     
     utils/
     app.py                         : GUIを記述。メインプログラムも兼ねる
