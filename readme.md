@@ -42,7 +42,7 @@ MediaPipeCamera/
 
 ![screenshot_new](https://user-images.githubusercontent.com/71445661/148839276-43848225-bccb-4e5c-9a21-91a0fb4e3884.png)
 
-
+https://user-images.githubusercontent.com/71445661/149914696-d720ad5f-b797-4dee-9c71-09de9b6eacab.mp4
 
 ## 工夫点
 
