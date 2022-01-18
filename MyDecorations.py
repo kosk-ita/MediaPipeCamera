@@ -30,7 +30,7 @@ class MPFaceDecoration(BaseDecoration):
         mp_face_detection = mp.solutions.face_detection
         self.face_detection = mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.5)
         
-        # 絵文字画像を保存する
+        # 絵文字画像を保持する
         img = Image.new("RGB", (134,126), (0,0,0))
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("./fonts/NotoColorEmoji.ttf", size=109, layout_engine=ImageFont.LAYOUT_RAQM)
@@ -40,7 +40,7 @@ class MPFaceDecoration(BaseDecoration):
         else:
             tick = str(emoji.emojize(':grinning_face:'))
         draw.text((0, 0), tick, fill="#faa2",font=font, embedded_color=True)
-        img.save("images/emoji/face_icon.png")
+        # img.save("images/emoji/face_icon.png")
         self.icon = img
         
         self.im_p = None
@@ -138,7 +138,7 @@ class FruitLotteryDecoration(BaseDecoration):
         return deco_image
     
     def random_fruit(self):
-        # 絵文字画像を保存する
+        # 絵文字画像を保持する
         img = Image.new("RGB", (134,126), (0,0,0))
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("./fonts/NotoColorEmoji.ttf", size=109, layout_engine=ImageFont.LAYOUT_RAQM)
@@ -147,7 +147,7 @@ class FruitLotteryDecoration(BaseDecoration):
         tick = fruits[np.random.randint(len(fruits))]
         
         draw.text((0, 0), tick, fill="#faa2",font=font, embedded_color=True)
-        img.save("images/emoji/fruit.png")
+        # img.save("images/emoji/fruit.png")
         self.fruit = img
         
 class FingerDrawingDecoration(BaseDecoration):
@@ -290,7 +290,7 @@ class HandSignDecoration(BaseDecoration):
             font = ImageFont.truetype("./fonts/NotoColorEmoji.ttf", size=109, layout_engine=ImageFont.LAYOUT_RAQM)
             
             draw.text((0, 0), text=emojis[i], fill="#faa2",font=font, embedded_color=True)
-            img.save(f"images/emoji/{handsign}.png")
+            # img.save(f"images/emoji/{handsign}.png")
             handsigns[handsign] = img  # 辞書に保存
         
         return handsigns  # 辞書を返す
