@@ -31,7 +31,7 @@ MediaPipeCamera/
     funcs.py           : 関数群
     MyDecorations.py   : デコレーションクラスを記述
     MyFilters.py       : フィルタークラスを記述
-    readme.py          : このファイル
+    readme.md          : このファイル
 
 ```
 
